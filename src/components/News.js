@@ -1,68 +1,68 @@
-import React, {use, useEffect, useState} from 'react'
-import NewsItem from './NewsItem'
+import React, { useEffect, useState } from 'react';
+import NewsItem from './NewsItem';
 import Spinner from './Spinner';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-const News = (props) =>{
+const News = (props) => {
+  const { country, category, apiKey, pageSize, setProgress } = props;
 
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  // document.title = `${capitalizeFirstLetter(category)} - NewsMonkey`;
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
 
- const capitalizeFirstLetter = (string) => {
+  const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-
-  const updateNews =  async() => {
-    props.setProgress(10); 
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
-    setLoading(true);
-    let data = await fetch(url);
-    props.setProgress(30); 
-    let parsedData = await data.json();
-    props.setProgress(70); 
-
-    setArticles(parsedData.articles);
-    setTotalResults(parsedData.totalResults);
-    setLoading(false);
-
-    props.setProgress(100);
-  }
-
-
-useEffect(() => {
-   updateNews();
-  }, []);
-
-
-  const handlePrevClick = async () => {
-    setPage(page - 1);
-    updateNews();
-  }
-
-  const handleNextClick = async () => {
-    setPage(page + 1);
-    updateNews();
-  }
-
-  const fetchMoreData = async () => {
-    setPage((prevPage) => prevPage + 1); // Keep this in one func and remaining in another function
-    // setPage(page + 1);
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
-    setLoading(true);
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    setArticles((prevArticles) => prevArticles.concat(parsedData.articles));
-    setTotalResults(parsedData.totalResults);
-    setLoading(false);
   };
 
+  // ✅ Run only on component mount or when props change (not page)
+  useEffect(() => {
+    const updateNews = async () => {
+      setProgress(10);
+      const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=1&pageSize=${pageSize}`;
+      setLoading(true);
+      let data = await fetch(url);
+      setProgress(30);
+      let parsedData = await data.json();
+      setProgress(70);
+      setArticles(parsedData.articles);
+      setTotalResults(parsedData.totalResults);
+      setLoading(false);
+      setInitialLoadDone(true);
+      setProgress(100);
+      setPage(1); // ✅ reset scroll page
+    };
 
-    console.log("render");
+    updateNews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ✅ Runs only when `page` changes and it's not first load
+  useEffect(() => {
+    if (!initialLoadDone || page === 1) return;
+
+    const fetchMoreNews = async () => {
+      const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${page}&pageSize=${pageSize}`;
+      setLoading(true);
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      setArticles((prevArticles) => prevArticles.concat(parsedData.articles));
+      setTotalResults(parsedData.totalResults);
+      setLoading(false);
+    };
+
+    fetchMoreNews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]); 
+
+  const fetchMoreData = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
+  console.log("render");
+
     return (
       <div>
           <h1 className="text-center" style={{ margin: '35px 0px' }}>NewsMonkey - Top {capitalizeFirstLetter(props.category)} Headlines</h1>
