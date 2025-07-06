@@ -27,7 +27,7 @@ const App = () => {
                 apiKey={apiKey}
                 key="general"
                 pageSize={pageSize}
-                country="in"
+                country="india"
                 category="general"
               />
             }
@@ -41,7 +41,7 @@ const App = () => {
                 apiKey={apiKey}
                 key="business"
                 pageSize={pageSize}
-                country="in"
+                country="india"
                 category="business"
               />
             }
@@ -54,7 +54,7 @@ const App = () => {
                 apiKey={apiKey}
                 key="entertainment"
                 pageSize={pageSize}
-                country="in"
+                country="india"
                 category="entertainment"
               />
             }
@@ -67,7 +67,7 @@ const App = () => {
                 apiKey={apiKey}
                 key="general"
                 pageSize={pageSize}
-                country="in"
+                country="india"
                 category="general"
               />
             }
@@ -80,7 +80,7 @@ const App = () => {
                 apiKey={apiKey}
                 key="health"
                 pageSize={pageSize}
-                country="in"
+                country="india"
                 category="health"
               />
             }
@@ -93,7 +93,7 @@ const App = () => {
                 apiKey={apiKey}
                 key="science"
                 pageSize={pageSize}
-                country="in"
+                country="india"
                 category="science"
               />
             }
@@ -106,7 +106,7 @@ const App = () => {
                 apiKey={apiKey}
                 key="sports"
                 pageSize={pageSize}
-                country="in"
+                country="india"
                 category="sports"
               />
             }
@@ -119,7 +119,7 @@ const App = () => {
                 apiKey={apiKey}
                 key="technology"
                 pageSize={pageSize}
-                country="in"
+                country="india"
                 category="technology"
               />
             }
