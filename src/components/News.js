@@ -6,7 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 const News = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const { country, category, pageSize, setProgress, apiKey } = props;
+  const { country, category, pageSize, setProgress} = props;
 
   //character limit for news items
   const characterLimit = (text, limit) => {
